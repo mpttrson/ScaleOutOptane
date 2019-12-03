@@ -1,4 +1,4 @@
-ID: SimpleClassicSchema
+ID: ScaleOutOptane
 _schema-version: '2.1'
 version: 0.0.1
 modules:
@@ -40,7 +40,7 @@ resources:
   - name: hdi_db
     parameters:
       config:
-        schema: SimpleClassic
+        schema: ScaleOutOptane
     properties:
       hdi-container-name: '${service-name}'
     type: com.sap.xs.hdi-container
