@@ -1,8 +1,0 @@
-PROCEDURE "dropDebugView"(IN nameOfIntermediateView NVARCHAR(256))
-   LANGUAGE SQLSCRIPT
-   SQL SECURITY INVOKER
-   AS
-BEGIN
-	call "dropDebugView_"(::CURRENT_OBJECT_SCHEMA,:nameOfIntermediateView,1);
-END
-
