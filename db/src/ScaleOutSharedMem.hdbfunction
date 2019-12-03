@@ -1,0 +1,30 @@
+FUNCTION "ScaleOutSharedMem"( )
+      RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					SHARED_MEM_USED	 		DECIMAL(13,2),
+					CODE_SIZE  		 	    DECIMAL(13,2),
+					STACK_SIZE  	        DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191014
+	Table Function to return Shared Memory statistics for Extension Node system with Optane
+ *****************************/
+ RETURN
+ SELECT 		"T1"."HOST" "HOST",
+				"T3"."NAMESERVER_ACTUAL_ROLE" "NODE",
+				ROUND(SUM(SHARED_MEMORY_USED_SIZE/1024/1024/1024)) "SHARED_MEM_USED",
+				ROUND(SUM(Code_Size/1024/1024/1024))  "CODE_SIZE",
+				ROUND(SUM(Stack_size/1024/1024/1024)) "STACK_SIZE"
+  
+FROM "Memory_" "T1"
+
+JOIN  "Landscape_" as T3 on T1.host = T3.host 
+WHERE UPPER(T3.host_actual_roles) not like '%STANDBY%' 
+
+GROUP BY 		"T1"."HOST",
+				"T3"."NAMESERVER_ACTUAL_ROLE";
+END;

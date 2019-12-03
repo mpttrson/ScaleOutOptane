@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:Variable="http://www.sap.com/ndb/BiModelVariable.ecore" id="AllocatorsQuery" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="Memory Allocators Query"/>
+<localVariables>
+  <variable id="IP_Depth" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="BIGINT" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="Single"/>
+      <defaultRange lowValue="1"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_Port" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="25" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="Single"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Summary">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="COMPONENT_TYPE"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="DEPTH"/>
+      <viewAttribute id="MEMORY_USED"/>
+      <viewAttribute id="PEAK_MEMORY_ALLOCATED"/>
+      <viewAttribute id="SPIKE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Allocators">
+      <mapping xsi:type="Calculation:AttributeMapping" target="COMPONENT_TYPE" source="COMPONENT_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DEPTH" source="DEPTH"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MEMORY_USED" source="MEMORY_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PEAK_MEMORY_ALLOCATED" source="PEAK_MEMORY_ALLOCATED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SPIKE" source="SPIKE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="Allocators" tableFunctionName="ScaleOutAllocators">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <variableMapping xsi:type="Variable:VariableMapping">
+      <targetVariable name="DEPTH"/>
+      <localVariable>IP_Depth</localVariable>
+    </variableMapping>
+    <variableMapping xsi:type="Variable:VariableMapping">
+      <targetVariable name="PORT"/>
+      <localVariable>IP_Port</localVariable>
+    </variableMapping>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Summary">
+  <attributes>
+    <attribute id="HOST" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="Summary" columnName="HOST"/>
+    </attribute>
+    <attribute id="NODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE"/>
+      <keyMapping columnObjectName="Summary" columnName="NODE"/>
+    </attribute>
+    <attribute id="COMPONENT_TYPE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COMPONENT_TYPE"/>
+      <keyMapping columnObjectName="Summary" columnName="COMPONENT_TYPE"/>
+    </attribute>
+    <attribute id="CATEGORY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="Summary" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="DEPTH" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DEPTH"/>
+      <keyMapping columnObjectName="Summary" columnName="DEPTH"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="MEMORY_USED" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="MEMORY_USED"/>
+      <measureMapping columnObjectName="Summary" columnName="MEMORY_USED"/>
+    </measure>
+    <measure id="PEAK_MEMORY_ALLOCATED" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PEAK_MEMORY_ALLOCATED"/>
+      <measureMapping columnObjectName="Summary" columnName="PEAK_MEMORY_ALLOCATED"/>
+    </measure>
+    <measure id="SPIKE" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SPIKE"/>
+      <measureMapping columnObjectName="Summary" columnName="SPIKE"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <sortAttributes>
+    <sortAttribute id="PEAK_MEMORY_ALLOCATED" direction="DESC"/>
+  </sortAttributes>
+  <localDimensions/>
+  <sharedDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Summary" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="83" y="225"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Allocators" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="90" y="376"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Summary" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="241.47705078125"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

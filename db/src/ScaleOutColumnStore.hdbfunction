@@ -1,0 +1,34 @@
+FUNCTION "ScaleOutColumnStore"( )
+      RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					COLUMN_STORE_MAIN	 	DECIMAL(13,2),
+					COLUMN_STORE_DELTA	 	DECIMAL(13,2),
+					COLUMN_STORE_PERSISTENT	DECIMAL(13,2),
+					DRAM_USED_PRECENT		DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191003
+	Table Function to return CS statistics for Extension Node system with Optane
+ *****************************/
+ RETURN
+ SELECT 			"T1"."HOST" "HOST",
+				"T3"."NAMESERVER_ACTUAL_ROLE" "NODE",
+				ROUND(SUM("T1".memory_size_in_main/1024/1024/1024)) "COLUMN_STORE_MAIN",
+				ROUND(SUM("T1".memory_size_in_delta/1024/1024/1024)) "COLUMN_STORE_DELTA",
+				ROUND(SUM("T1".persistent_memory_size_in_total/1024/1024/1024)) "COLUMN_STORE_PERSISTENT",
+				(round(SUM("T1".memory_size_in_total/1024/1024/1024) / 
+            	(SUM("T1".memory_size_in_total/1024/1024/1024) + SUM("T1".persistent_memory_size_in_total/1024/1024/1024)),2)*100) "DRAM_USED_PRECENT"
+				
+  
+FROM "AllColumns_" "T1"
+
+JOIN  "Landscape_"as T3 on T1.host = T3.host 
+WHERE UPPER(T3.host_actual_roles) not like '%STANDBY%' 
+
+GROUP BY 		"T1"."HOST",
+				"T3"."NAMESERVER_ACTUAL_ROLE";
+END;

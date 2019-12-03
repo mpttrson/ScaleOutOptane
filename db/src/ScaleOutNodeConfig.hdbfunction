@@ -1,0 +1,96 @@
+FUNCTION "ScaleOutNodeConfig"( )
+       RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					HW_MANUF	 		    NVARCHAR(25),
+					HW_MODEL		 	    NVARCHAR(25),
+					CPU_MODEL  	            NVARCHAR(75),
+					CPU_SOCKETS      		NVARCHAR(25),
+					CPU_CORES     		    NVARCHAR(25),
+					OS_VERSION      		NVARCHAR(75),
+					HANA_VERSION      		NVARCHAR(75)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191014
+	Table Function to return Server Config for Extension Node system with Optane
+ *****************************/
+ RETURN
+ SELECT 		"HOST"."HOST" , 
+				"NAMESERVER_ACTUAL_ROLE" "NODE",
+				"HWM"."VALUE" "HW_MANUF",
+				"MODEL"."VALUE" "HW_MODEL",
+				"CPUM"."VALUE" "CPU_MODEL",
+				"CPUS"."VALUE" "CPU_SOCKETS",
+				"CORES"."VALUE" "CPU_CORES",
+				"OS"."VALUE" "OS_VERSION",
+				"VERSION"."VALUE" "HANA_VERSION"
+				
+FROM 			"Landscape_" "HOST"
+-----------  Manufacturer ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'hw_manufacturer'
+) "HWM"
+ON "HOST"."HOST" = "HWM"."HOST"			
+-----------  Server Model ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'hw_model'
+) "MODEL"
+ON "HOST"."HOST" = "MODEL"."HOST"			
+-----------  CPU Model ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'cpu_model'
+) "CPUM"
+ON "HOST"."HOST" = "CPUM"."HOST"			
+			
+-----------  CPU Sockets ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'cpu_sockets'
+) "CPUS"
+ON "HOST"."HOST" = "CPUS"."HOST"			
+-----------  OS Name ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'os_name'
+) "OS"
+ON "HOST"."HOST" = "OS"."HOST"	
+-----------  HANA Version ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_"
+				WHERE "KEY" = 'build_version'
+) "VERSION"
+ON "HOST"."HOST" = "VERSION"."HOST"	
+-----------  CPU Cores ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				"VALUE" 
+				FROM  "Host_" 
+				WHERE "KEY" = 'cpu_cores'
+) "CORES"
+ON "HOST"."HOST" = "CORES"."HOST";	  
+END;

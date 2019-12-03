@@ -1,0 +1,41 @@
+FUNCTION "ScaleOutAllocators"(DEPTH BIGINT , PORT NVARCHAR(5) )
+       RETURNS table (	HOST					NVARCHAR(25),
+						NODE	 		    	NVARCHAR(25),
+						COMPONENT_TYPE	    	NVARCHAR(50),
+						CATEGORY 		    	NVARCHAR(50),
+						DEPTH	 		    	NVARCHAR(25),
+						MEMORY_USED 		    DECIMAL(13,2),
+						PEAK_MEMORY_ALLOCATED   DECIMAL(13,2),
+						SPIKE			       	DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN 
+    /*****************************
+       	MPATTER1	20191111
+		Table Function to return Heap Allocator statistics for Extension Node system with Optane by depth
+    ****************************/
+RETURN
+SELECT 	T1.HOST "HOST",
+		T3.NAMESERVER_ACTUAL_ROLE "NODE",
+		T1.component "COMPONENT_TYPE" ,
+		T1.category "CATEGORY",
+		T1.depth "DEPTH",
+		round(sum(inclusive_size_in_use)/1024/1024/1024,0) "MEMORY_USED",
+		round(sum(inclusive_peak_allocation_size)/1024/1024/1024,0) "PEAK_MEMORY_ALLOCATED",
+		(round(sum(inclusive_size_in_use)/1024/1024/1024,0) - round(sum(inclusive_peak_allocation_size)/1024/1024/1024,0)) "SPIKE"
+	
+from "Heap_" "T1"
+
+JOIN  "Landscape_" as "T3"
+on "T1"."HOST" = "T3"."HOST" 
+WHERE UPPER("T3"."HOST_ACTUAL_ROLES") NOT LIKE '%STANDBY%' 
+AND  "T1"."PORT" = :PORT AND "T1"."DEPTH" = :DEPTH 
+GROUP BY  	"T1"."HOST",
+			"T3"."NAMESERVER_ACTUAL_ROLE",
+			"T1"."COMPONENT",
+			"T1"."CATEGORY",
+			"T1"."DEPTH";
+END;
+

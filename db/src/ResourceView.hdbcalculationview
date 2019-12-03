@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ResourceView" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="ResourceView"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="ReadResources" type="TABLE_FUNCTION">
+    <resourceUri>ReadResources</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Base">
+    <viewAttributes>
+      <viewAttribute id="ALLOCATED_PERCENT"/>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY"/>
+      <viewAttribute id="TOTAL_DRAM_USED"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT"/>
+      <viewAttribute id="USED_PERCENT"/>
+      <viewAttribute id="PEAK_PERCENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="ReadResources"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Middle">
+    <viewAttributes>
+      <viewAttribute id="ALLOCATED_PERCENT"/>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY"/>
+      <viewAttribute id="TOTAL_DRAM_USED"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT"/>
+      <viewAttribute id="USED_PERCENT"/>
+      <viewAttribute id="PEAK_PERCENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Base"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Middle">
+  <attributes>
+    <attribute id="HOST" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="Middle" columnName="HOST"/>
+    </attribute>
+    <attribute id="NODE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE"/>
+      <keyMapping columnObjectName="Middle" columnName="NODE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="ALLOCATED_PERCENT" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="ALLOCATED_PERCENT"/>
+      <measureMapping columnObjectName="Middle" columnName="ALLOCATED_PERCENT"/>
+    </measure>
+    <measure id="TOTAL_PHYSICAL_DRAM" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_PHYSICAL_DRAM"/>
+      <measureMapping columnObjectName="Middle" columnName="TOTAL_PHYSICAL_DRAM"/>
+    </measure>
+    <measure id="TOTAL_RESIDENT_MEMORY" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_RESIDENT_MEMORY"/>
+      <measureMapping columnObjectName="Middle" columnName="TOTAL_RESIDENT_MEMORY"/>
+    </measure>
+    <measure id="TOTAL_DRAM_USED" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_USED"/>
+      <measureMapping columnObjectName="Middle" columnName="TOTAL_DRAM_USED"/>
+    </measure>
+    <measure id="TOTAL_DRAM_PEAK" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_PEAK"/>
+      <measureMapping columnObjectName="Middle" columnName="TOTAL_DRAM_PEAK"/>
+    </measure>
+    <measure id="TOTAL_DRAM_ALLOCATED" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_ALLOCATED"/>
+      <measureMapping columnObjectName="Middle" columnName="TOTAL_DRAM_ALLOCATED"/>
+    </measure>
+    <measure id="DRAM_ALLOCATION_LIMIT" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_ALLOCATION_LIMIT"/>
+      <measureMapping columnObjectName="Middle" columnName="DRAM_ALLOCATION_LIMIT"/>
+    </measure>
+    <measure id="USED_PERCENT" order="11" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="USED_PERCENT"/>
+      <measureMapping columnObjectName="Middle" columnName="USED_PERCENT"/>
+    </measure>
+    <measure id="PEAK_PERCENT" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PEAK_PERCENT"/>
+      <measureMapping columnObjectName="Middle" columnName="PEAK_PERCENT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="CC_1" order="1" aggregationType="sum" measureType="simple" datatype="INTEGER" expressionLanguage="SQL">
+      <formula>1</formula>
+    
+      
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Base" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="322"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Middle" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

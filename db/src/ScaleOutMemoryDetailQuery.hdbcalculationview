@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ScaleOutMemoryDetailQuery" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="Scale Out Memory Detail Query"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="ScaleOutSharedMem" type="TABLE_FUNCTION">
+    <resourceUri>ScaleOutSharedMem</resourceUri>
+  </DataSource>
+  <DataSource id="ScaleOutDRAM" type="TABLE_FUNCTION">
+    <resourceUri>ScaleOutDRAM</resourceUri>
+  </DataSource>
+  <DataSource id="ScaleOutHeap" type="TABLE_FUNCTION">
+    <resourceUri>ScaleOutHeap</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Shared">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="CODE_SIZE"/>
+      <viewAttribute id="STACK_SIZE"/>
+      <viewAttribute id="SHARED_MEM_USED"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="ScaleOutSharedMem">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CODE_SIZE" source="CODE_SIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STACK_SIZE" source="STACK_SIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHARED_MEM_USED" source="SHARED_MEM_USED"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="DRAM">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="ALLOCATED_PERCENT"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM"/>
+      <viewAttribute id="TOTAL_DRAM_USED"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT"/>
+      <viewAttribute id="USED_PERCENT"/>
+      <viewAttribute id="PEAK_PERCENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="ScaleOutDRAM">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ALLOCATED_PERCENT" source="ALLOCATED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_RESIDENT_MEMORY" source="TOTAL_RESIDENT_MEMORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_PHYSICAL_DRAM" source="TOTAL_PHYSICAL_DRAM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_USED" source="TOTAL_DRAM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_PEAK" source="TOTAL_DRAM_PEAK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_ALLOCATED" source="TOTAL_DRAM_ALLOCATED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_ALLOCATION_LIMIT" source="DRAM_ALLOCATION_LIMIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USED_PERCENT" source="USED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PEAK_PERCENT" source="PEAK_PERCENT"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Heap">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="HEAP_SYSTEM"/>
+      <viewAttribute id="HEAP_EXEC_TEMP"/>
+      <viewAttribute id="HEAP_MONITOR_STATS"/>
+      <viewAttribute id="HEAP_OTHER"/>
+      <viewAttribute id="HEAP_ROW_STORE"/>
+      <viewAttribute id="HEAP_CACHE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="ScaleOutHeap">
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_SYSTEM" source="HEAP_SYSTEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_EXEC_TEMP" source="HEAP_EXEC_TEMP"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_MONITOR_STATS" source="HEAP_MONITOR_STATS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_OTHER" source="HEAP_OTHER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_ROW_STORE" source="HEAP_ROW_STORE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_CACHE" source="HEAP_CACHE"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Detail_1" cardinality="C1_1" joinType="inner" multiJoinNode="Detail" multiJoinCentralTable="Shared" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_USED" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY" aggregationType="sum"/>
+      <viewAttribute id="HEAP_SYSTEM" aggregationType="sum"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT" aggregationType="sum"/>
+      <viewAttribute id="HEAP_EXEC_TEMP" aggregationType="sum"/>
+      <viewAttribute id="HEAP_MONITOR_STATS" aggregationType="sum"/>
+      <viewAttribute id="HEAP_OTHER" aggregationType="sum"/>
+      <viewAttribute id="HEAP_ROW_STORE" aggregationType="sum"/>
+      <viewAttribute id="HEAP_CACHE" aggregationType="sum"/>
+      <viewAttribute id="ALLOCATED_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="USED_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="PEAK_PERCENT" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$HOST$HOST"/>
+      <viewAttribute hidden="true" id="JOIN$NODE$NODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="DRAM">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ALLOCATED_PERCENT" source="ALLOCATED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_ALLOCATED" source="TOTAL_DRAM_ALLOCATED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_RESIDENT_MEMORY" source="TOTAL_RESIDENT_MEMORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_PHYSICAL_DRAM" source="TOTAL_PHYSICAL_DRAM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USED_PERCENT" source="USED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_USED" source="TOTAL_DRAM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_PEAK" source="TOTAL_DRAM_PEAK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_ALLOCATION_LIMIT" source="DRAM_ALLOCATION_LIMIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PEAK_PERCENT" source="PEAK_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <input node="Heap">
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_SYSTEM" source="HEAP_SYSTEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_EXEC_TEMP" source="HEAP_EXEC_TEMP"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_MONITOR_STATS" source="HEAP_MONITOR_STATS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_OTHER" source="HEAP_OTHER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_ROW_STORE" source="HEAP_ROW_STORE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_CACHE" source="HEAP_CACHE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <joinAttribute name="JOIN$HOST$HOST"/>
+    <joinAttribute name="JOIN$NODE$NODE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Detail_2" cardinality="C1_1" joinType="inner" multiJoinNode="Detail" multiJoinCentralTable="Shared" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_USED" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY" aggregationType="sum"/>
+      <viewAttribute id="CODE_SIZE" aggregationType="sum"/>
+      <viewAttribute id="STACK_SIZE" aggregationType="sum"/>
+      <viewAttribute id="SHARED_MEM_USED" aggregationType="sum"/>
+      <viewAttribute id="HEAP_SYSTEM" aggregationType="sum"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT" aggregationType="sum"/>
+      <viewAttribute id="HEAP_EXEC_TEMP" aggregationType="sum"/>
+      <viewAttribute id="HEAP_MONITOR_STATS" aggregationType="sum"/>
+      <viewAttribute id="HEAP_OTHER" aggregationType="sum"/>
+      <viewAttribute id="HEAP_ROW_STORE" aggregationType="sum"/>
+      <viewAttribute id="HEAP_CACHE" aggregationType="sum"/>
+      <viewAttribute id="ALLOCATED_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="USED_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="PEAK_PERCENT" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$HOST$HOST"/>
+      <viewAttribute hidden="true" id="JOIN$NODE$NODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Shared">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CODE_SIZE" source="CODE_SIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STACK_SIZE" source="STACK_SIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHARED_MEM_USED" source="SHARED_MEM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <input node="Detail_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_PHYSICAL_DRAM" source="TOTAL_PHYSICAL_DRAM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_USED" source="TOTAL_DRAM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_PEAK" source="TOTAL_DRAM_PEAK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_ALLOCATED" source="TOTAL_DRAM_ALLOCATED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_RESIDENT_MEMORY" source="TOTAL_RESIDENT_MEMORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_SYSTEM" source="HEAP_SYSTEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_ALLOCATION_LIMIT" source="DRAM_ALLOCATION_LIMIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_EXEC_TEMP" source="HEAP_EXEC_TEMP"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_MONITOR_STATS" source="HEAP_MONITOR_STATS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_OTHER" source="HEAP_OTHER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_ROW_STORE" source="HEAP_ROW_STORE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEAP_CACHE" source="HEAP_CACHE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ALLOCATED_PERCENT" source="ALLOCATED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USED_PERCENT" source="USED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PEAK_PERCENT" source="PEAK_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <joinAttribute name="JOIN$HOST$HOST"/>
+    <joinAttribute name="JOIN$NODE$NODE"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Detail_2">
+  <attributes>
+    <attribute id="HOST" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="Detail_2" columnName="HOST"/>
+    </attribute>
+    <attribute id="NODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE"/>
+      <keyMapping columnObjectName="Detail_2" columnName="NODE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TOTAL_PHYSICAL_DRAM" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_PHYSICAL_DRAM"/>
+      <measureMapping columnObjectName="Detail_2" columnName="TOTAL_PHYSICAL_DRAM"/>
+    </measure>
+    <measure id="TOTAL_DRAM_USED" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_USED"/>
+      <measureMapping columnObjectName="Detail_2" columnName="TOTAL_DRAM_USED"/>
+    </measure>
+    <measure id="TOTAL_DRAM_PEAK" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_PEAK"/>
+      <measureMapping columnObjectName="Detail_2" columnName="TOTAL_DRAM_PEAK"/>
+    </measure>
+    <measure id="TOTAL_DRAM_ALLOCATED" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_ALLOCATED"/>
+      <measureMapping columnObjectName="Detail_2" columnName="TOTAL_DRAM_ALLOCATED"/>
+    </measure>
+    <measure id="TOTAL_RESIDENT_MEMORY" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_RESIDENT_MEMORY"/>
+      <measureMapping columnObjectName="Detail_2" columnName="TOTAL_RESIDENT_MEMORY"/>
+    </measure>
+    <measure id="CODE_SIZE" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CODE_SIZE"/>
+      <measureMapping columnObjectName="Detail_2" columnName="CODE_SIZE"/>
+    </measure>
+    <measure id="STACK_SIZE" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="STACK_SIZE"/>
+      <measureMapping columnObjectName="Detail_2" columnName="STACK_SIZE"/>
+    </measure>
+    <measure id="SHARED_MEM_USED" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SHARED_MEM_USED"/>
+      <measureMapping columnObjectName="Detail_2" columnName="SHARED_MEM_USED"/>
+    </measure>
+    <measure id="HEAP_SYSTEM" order="11" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_SYSTEM"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_SYSTEM"/>
+    </measure>
+    <measure id="DRAM_ALLOCATION_LIMIT" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_ALLOCATION_LIMIT"/>
+      <measureMapping columnObjectName="Detail_2" columnName="DRAM_ALLOCATION_LIMIT"/>
+    </measure>
+    <measure id="HEAP_EXEC_TEMP" order="13" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_EXEC_TEMP"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_EXEC_TEMP"/>
+    </measure>
+    <measure id="HEAP_MONITOR_STATS" order="14" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_MONITOR_STATS"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_MONITOR_STATS"/>
+    </measure>
+    <measure id="HEAP_OTHER" order="15" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_OTHER"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_OTHER"/>
+    </measure>
+    <measure id="HEAP_ROW_STORE" order="16" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_ROW_STORE"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_ROW_STORE"/>
+    </measure>
+    <measure id="HEAP_CACHE" order="17" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HEAP_CACHE"/>
+      <measureMapping columnObjectName="Detail_2" columnName="HEAP_CACHE"/>
+    </measure>
+    <measure id="ALLOCATED_PERCENT" order="18" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="ALLOCATED_PERCENT"/>
+      <measureMapping columnObjectName="Detail_2" columnName="ALLOCATED_PERCENT"/>
+    </measure>
+    <measure id="USED_PERCENT" order="19" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="USED_PERCENT"/>
+      <measureMapping columnObjectName="Detail_2" columnName="USED_PERCENT"/>
+    </measure>
+    <measure id="PEAK_PERCENT" order="20" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PEAK_PERCENT"/>
+      <measureMapping columnObjectName="Detail_2" columnName="PEAK_PERCENT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+  <sharedDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="361.75405278666415" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Detail" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="236.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Shared" modelObjectNameSpace="Detail" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Detail">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136.0234375"/>
+    </shape>
+    <shape modelObjectName="DRAM" modelObjectNameSpace="Detail" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Detail">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136.0234375"/>
+    </shape>
+    <shape modelObjectName="Heap" modelObjectNameSpace="Detail" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Detail">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="100"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Shared" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="91.99999999999997" y="391.9999976158142"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="DRAM" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="512" y="391.9999976158142"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Heap" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="391.9999976158142"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Detail_2" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

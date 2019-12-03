@@ -1,0 +1,71 @@
+{
+  "ResourceUtilization_": {
+    "target": {
+      "object": "M_HOST_RESOURCE_UTILIZATION",
+      "schema": "SYS"
+    }
+  },
+  "Memory_": {
+    "target": {
+      "object": "M_SERVICE_MEMORY",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "Landscape_": {
+    "target": {
+      "object": "M_LANDSCAPE_HOST_CONFIGURATION",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "Dummy_": {
+    "target": {
+      "object": "DUMMY",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "AllColumns_": {
+    "target": {
+      "object": "M_CS_COLUMNS",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "AllColumnTables_": {
+    "target": {
+      "object": "M_CS_TABLES",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "ServiceStatistics_": {
+    "target": {
+      "object": "M_SERVICE_STATISTICS",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "Heap_": {
+    "target": {
+      "object": "M_HEAP_MEMORY",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "Host_": {
+    "target": {
+      "object": "M_HOST_INFORMATION",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  },
+  "PersistentMemory_": {
+    "target": {
+      "object": "M_PERSISTENT_MEMORY_VOLUMES",
+      "schema": "SYS",
+      "database": "HXE"
+    }
+  }
+}

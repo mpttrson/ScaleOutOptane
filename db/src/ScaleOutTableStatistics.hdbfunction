@@ -1,0 +1,40 @@
+FUNCTION "ScaleOutTableStatistics"( SCHEMA NVARCHAR(25) , TABLE NVARCHAR(25) ) 
+     RETURNS table ( HOST					NVARCHAR(25),
+					SCHEMA	 		    	NVARCHAR(25),
+					TABLE	 		    	NVARCHAR(25),
+					PARTITION	 		    NVARCHAR(25),
+					TOTAL_MEMORY	 		DECIMAL(13,2),
+					DRAM_TOTAL  		 	DECIMAL(13,2),
+					DRAM_MAIN  	            DECIMAL(13,2),
+					DRAM_DELTA 	            DECIMAL(13,2),
+					DRAM_MISC  	            DECIMAL(13,2),
+					PMEM_TOTAL 	            DECIMAL(13,2),
+					EST_MAX_MEMORY          DECIMAL(13,2),
+					RECORD_COUNT	        DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191014
+	Table Function to return Individual table statistics for Extension Node system with Optane
+ *****************************/
+ RETURN
+ 
+select 		host "HOST", 
+			schema_name "SCHEMA",
+			table_name "TABLE",
+			part_id "PARTITION",
+			round(memory_size_in_total/1024/1024/1024) + round(persistent_memory_size_in_total/1024/1024/1024) "TOTAL_MEMORY",
+			round(memory_size_in_total/1024/1024/1024) "DRAM_TOTAL",
+			round(memory_size_in_main/1024/1024/1024) "DRAM_MAIN",
+			round(memory_size_in_delta/1024/1024/1024)"DRAM_DELTA",
+			round(memory_size_in_misc/1024/1024/1024) "DRAM_MISC",
+			round(persistent_memory_size_in_total/1024/1024/1024) "PMEM_TOTAL",
+			round(estimated_max_memory_size_in_total/1024/1024/1024) "EST_MAX_MEMORY",
+			record_count "RECORD_COUNT"
+
+from "AllColumnTables_"
+WHERE ( schema_name = :SCHEMA AND table_name = :TABLE);
+END;

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ScaleOutSummaryQuery" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="Scale Out Summary Query"/>
+<localVariables/>
+<variableMappings/>
+<dataSources/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:AggregationView" id="PMEM">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="PMEM_AVAILABLE" aggregationType="sum"/>
+      <viewAttribute id="PMEM_USED" aggregationType="sum"/>
+      <viewAttribute id="PMEM_UTILIZED" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="NUMA"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="NUMA" tableFunctionName="ScaleOutPMEM">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="ColumnStore" tableFunctionName="ScaleOutColumnStoreTables">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="Node" tableFunctionName="ScaleOutNodeConfig">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="DRAM" tableFunctionName="ScaleOutDRAM">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Summary_1" cardinality="C1_1" joinType="inner" multiJoinNode="Summary" multiJoinCentralTable="DRAM" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="DRAM_USED_PRECENT" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_MAIN" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_DELTA" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_PERSISTENT" aggregationType="sum"/>
+      <viewAttribute id="OS_VERSION"/>
+      <viewAttribute id="HANA_VERSION"/>
+      <viewAttribute id="HW_MANUF"/>
+      <viewAttribute id="HW_MODEL"/>
+      <viewAttribute id="CPU_MODEL"/>
+      <viewAttribute id="CPU_SOCKETS"/>
+      <viewAttribute id="CPU_CORES"/>
+      <viewAttribute hidden="true" id="JOIN$HOST$HOST"/>
+      <viewAttribute hidden="true" id="JOIN$NODE$NODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="ColumnStore">
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_USED_PRECENT" source="DRAM_USED_PRECENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_MAIN" source="COLUMN_STORE_MAIN"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_DELTA" source="COLUMN_STORE_DELTA"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_PERSISTENT" source="COLUMN_STORE_PERSISTENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <input node="Node">
+      <mapping xsi:type="Calculation:AttributeMapping" target="OS_VERSION" source="OS_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HANA_VERSION" source="HANA_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MANUF" source="HW_MANUF"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MODEL" source="HW_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_MODEL" source="CPU_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_SOCKETS" source="CPU_SOCKETS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_CORES" source="CPU_CORES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+    </input>
+    <joinAttribute name="JOIN$HOST$HOST"/>
+    <joinAttribute name="JOIN$NODE$NODE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Summary_2" cardinality="C1_1" joinType="leftOuter" multiJoinNode="Summary" multiJoinCentralTable="DRAM" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="PMEM_AVAILABLE" aggregationType="sum"/>
+      <viewAttribute id="PMEM_USED" aggregationType="sum"/>
+      <viewAttribute id="PMEM_UTILIZED" aggregationType="sum"/>
+      <viewAttribute id="DRAM_USED_PRECENT" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_MAIN" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_DELTA" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_PERSISTENT" aggregationType="sum"/>
+      <viewAttribute id="OS_VERSION"/>
+      <viewAttribute id="HANA_VERSION"/>
+      <viewAttribute id="HW_MANUF"/>
+      <viewAttribute id="HW_MODEL"/>
+      <viewAttribute id="CPU_MODEL"/>
+      <viewAttribute id="CPU_SOCKETS"/>
+      <viewAttribute id="CPU_CORES"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Summary_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_USED_PRECENT" source="DRAM_USED_PRECENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_MAIN" source="COLUMN_STORE_MAIN"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_DELTA" source="COLUMN_STORE_DELTA"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_PERSISTENT" source="COLUMN_STORE_PERSISTENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OS_VERSION" source="OS_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HANA_VERSION" source="HANA_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MANUF" source="HW_MANUF"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MODEL" source="HW_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_MODEL" source="CPU_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_SOCKETS" source="CPU_SOCKETS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_CORES" source="CPU_CORES"/>
+    </input>
+    <input node="PMEM">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_AVAILABLE" source="PMEM_AVAILABLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_USED" source="PMEM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_UTILIZED" source="PMEM_UTILIZED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+    </input>
+    <joinAttribute name="HOST"/>
+    <joinAttribute name="NODE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Summary_3" cardinality="C1_1" joinType="inner" multiJoinNode="Summary" multiJoinCentralTable="DRAM" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="PMEM_AVAILABLE" aggregationType="sum"/>
+      <viewAttribute id="PMEM_USED" aggregationType="sum"/>
+      <viewAttribute id="PMEM_UTILIZED" aggregationType="sum"/>
+      <viewAttribute id="DRAM_USED_PRECENT" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_MAIN" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_DELTA" aggregationType="sum"/>
+      <viewAttribute id="COLUMN_STORE_PERSISTENT" aggregationType="sum"/>
+      <viewAttribute id="OS_VERSION"/>
+      <viewAttribute id="HANA_VERSION"/>
+      <viewAttribute id="HW_MANUF"/>
+      <viewAttribute id="HW_MODEL"/>
+      <viewAttribute id="CPU_MODEL"/>
+      <viewAttribute id="CPU_SOCKETS"/>
+      <viewAttribute id="CPU_CORES"/>
+      <viewAttribute id="TOTAL_RESIDENT_MEMORY" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_PHYSICAL_DRAM" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_USED" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_PEAK" aggregationType="sum"/>
+      <viewAttribute id="TOTAL_DRAM_ALLOCATED" aggregationType="sum"/>
+      <viewAttribute id="DRAM_ALLOCATION_LIMIT" aggregationType="sum"/>
+      <viewAttribute id="USED_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="PEAK_PERCENT" aggregationType="sum"/>
+      <viewAttribute id="ALLOCATED_PERCENT" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$NODE$NODE"/>
+      <viewAttribute hidden="true" id="JOIN$HOST$HOST"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="DRAM">
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_RESIDENT_MEMORY" source="TOTAL_RESIDENT_MEMORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_PHYSICAL_DRAM" source="TOTAL_PHYSICAL_DRAM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_USED" source="TOTAL_DRAM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_PEAK" source="TOTAL_DRAM_PEAK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTAL_DRAM_ALLOCATED" source="TOTAL_DRAM_ALLOCATED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_ALLOCATION_LIMIT" source="DRAM_ALLOCATION_LIMIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USED_PERCENT" source="USED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PEAK_PERCENT" source="PEAK_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ALLOCATED_PERCENT" source="ALLOCATED_PERCENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+    </input>
+    <input node="Summary_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOST" source="HOST"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_AVAILABLE" source="PMEM_AVAILABLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_USED" source="PMEM_USED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PMEM_UTILIZED" source="PMEM_UTILIZED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DRAM_USED_PRECENT" source="DRAM_USED_PRECENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_MAIN" source="COLUMN_STORE_MAIN"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_DELTA" source="COLUMN_STORE_DELTA"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COLUMN_STORE_PERSISTENT" source="COLUMN_STORE_PERSISTENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OS_VERSION" source="OS_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HANA_VERSION" source="HANA_VERSION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MANUF" source="HW_MANUF"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HW_MODEL" source="HW_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_MODEL" source="CPU_MODEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_SOCKETS" source="CPU_SOCKETS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CPU_CORES" source="CPU_CORES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$NODE$NODE" source="NODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$HOST$HOST" source="HOST"/>
+    </input>
+    <joinAttribute name="JOIN$NODE$NODE"/>
+    <joinAttribute name="JOIN$HOST$HOST"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Summary_3">
+  <attributes>
+    <attribute id="HOST" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="Summary_3" columnName="HOST"/>
+    </attribute>
+    <attribute id="NODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE"/>
+      <keyMapping columnObjectName="Summary_3" columnName="NODE"/>
+    </attribute>
+    <attribute id="OS_VERSION" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="OS_VERSION"/>
+      <keyMapping columnObjectName="Summary_3" columnName="OS_VERSION"/>
+    </attribute>
+    <attribute id="HANA_VERSION" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HANA_VERSION"/>
+      <keyMapping columnObjectName="Summary_3" columnName="HANA_VERSION"/>
+    </attribute>
+    <attribute id="HW_MANUF" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HW_MANUF"/>
+      <keyMapping columnObjectName="Summary_3" columnName="HW_MANUF"/>
+    </attribute>
+    <attribute id="HW_MODEL" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HW_MODEL"/>
+      <keyMapping columnObjectName="Summary_3" columnName="HW_MODEL"/>
+    </attribute>
+    <attribute id="CPU_MODEL" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CPU_MODEL"/>
+      <keyMapping columnObjectName="Summary_3" columnName="CPU_MODEL"/>
+    </attribute>
+    <attribute id="CPU_SOCKETS" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CPU_SOCKETS"/>
+      <keyMapping columnObjectName="Summary_3" columnName="CPU_SOCKETS"/>
+    </attribute>
+    <attribute id="CPU_CORES" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CPU_CORES"/>
+      <keyMapping columnObjectName="Summary_3" columnName="CPU_CORES"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="PMEM_AVAILABLE" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PMEM_AVAILABLE"/>
+      <measureMapping columnObjectName="Summary_3" columnName="PMEM_AVAILABLE"/>
+    </measure>
+    <measure id="PMEM_USED" order="11" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PMEM_USED"/>
+      <measureMapping columnObjectName="Summary_3" columnName="PMEM_USED"/>
+    </measure>
+    <measure id="PMEM_UTILIZED" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PMEM_UTILIZED"/>
+      <measureMapping columnObjectName="Summary_3" columnName="PMEM_UTILIZED"/>
+    </measure>
+    <measure id="DRAM_USED_PRECENT" order="13" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_USED_PRECENT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="DRAM_USED_PRECENT"/>
+    </measure>
+    <measure id="COLUMN_STORE_MAIN" order="14" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="COLUMN_STORE_MAIN"/>
+      <measureMapping columnObjectName="Summary_3" columnName="COLUMN_STORE_MAIN"/>
+    </measure>
+    <measure id="COLUMN_STORE_DELTA" order="15" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="COLUMN_STORE_DELTA"/>
+      <measureMapping columnObjectName="Summary_3" columnName="COLUMN_STORE_DELTA"/>
+    </measure>
+    <measure id="COLUMN_STORE_PERSISTENT" order="16" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="COLUMN_STORE_PERSISTENT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="COLUMN_STORE_PERSISTENT"/>
+    </measure>
+    <measure id="TOTAL_RESIDENT_MEMORY" order="17" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_RESIDENT_MEMORY"/>
+      <measureMapping columnObjectName="Summary_3" columnName="TOTAL_RESIDENT_MEMORY"/>
+    </measure>
+    <measure id="TOTAL_PHYSICAL_DRAM" order="18" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_PHYSICAL_DRAM"/>
+      <measureMapping columnObjectName="Summary_3" columnName="TOTAL_PHYSICAL_DRAM"/>
+    </measure>
+    <measure id="TOTAL_DRAM_USED" order="19" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_USED"/>
+      <measureMapping columnObjectName="Summary_3" columnName="TOTAL_DRAM_USED"/>
+    </measure>
+    <measure id="TOTAL_DRAM_PEAK" order="20" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_PEAK"/>
+      <measureMapping columnObjectName="Summary_3" columnName="TOTAL_DRAM_PEAK"/>
+    </measure>
+    <measure id="TOTAL_DRAM_ALLOCATED" order="21" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_DRAM_ALLOCATED"/>
+      <measureMapping columnObjectName="Summary_3" columnName="TOTAL_DRAM_ALLOCATED"/>
+    </measure>
+    <measure id="DRAM_ALLOCATION_LIMIT" order="22" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_ALLOCATION_LIMIT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="DRAM_ALLOCATION_LIMIT"/>
+    </measure>
+    <measure id="USED_PERCENT" order="23" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="USED_PERCENT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="USED_PERCENT"/>
+    </measure>
+    <measure id="PEAK_PERCENT" order="24" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PEAK_PERCENT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="PEAK_PERCENT"/>
+    </measure>
+    <measure id="ALLOCATED_PERCENT" order="25" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="ALLOCATED_PERCENT"/>
+      <measureMapping columnObjectName="Summary_3" columnName="ALLOCATED_PERCENT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+  <sharedDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="446.6473856039578" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="PMEM" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92.00000000000011" y="406.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="NUMA" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92.00000000000011" y="511.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="ColumnStore" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="512.0000000000001" y="406.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Node" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302.0000000000001" y="406.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="DRAM" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="722" y="406.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Summary" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="446.6473856039578" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="DRAM" modelObjectNameSpace="Summary" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Summary">
+      <upperLeftCorner x="763.65283203125" y="-38"/>
+      <rectangleSize width="237.58837890625"/>
+    </shape>
+    <shape modelObjectName="PMEM" modelObjectNameSpace="Summary" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Summary">
+      <upperLeftCorner x="456.85498046875" y="310"/>
+      <rectangleSize width="182.7978515625"/>
+    </shape>
+    <shape modelObjectName="ColumnStore" modelObjectNameSpace="Summary" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Summary">
+      <upperLeftCorner x="215.18994140625" y="-49.5"/>
+      <rectangleSize width="252.6650390625"/>
+    </shape>
+    <shape modelObjectName="Node" modelObjectNameSpace="Summary" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Summary">
+      <upperLeftCorner x="-76" y="128"/>
+      <rectangleSize width="172.18994140625"/>
+    </shape>
+    <shape modelObjectName="Summary_3" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

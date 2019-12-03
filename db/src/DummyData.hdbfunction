@@ -1,0 +1,17 @@
+FUNCTION "DummyData"( )
+       RETURNS  table ( HOST					NVARCHAR(25),
+						NODE	 		    	NVARCHAR(25)
+					)
+       LANGUAGE SQLSCRIPT 
+       SQL SECURITY INVOKER AS 
+BEGIN 
+    /*****************************
+        Write your function logic
+    ****************************/
+     RETURN
+ SELECT 	'Server' "HOST",
+			'Node' "NODE"
+			FROM "Dummy_"
+	;
+
+END;

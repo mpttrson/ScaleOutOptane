@@ -1,0 +1,12 @@
+{
+	"SYS": {
+		"target": {
+			"schema": "SYS"
+		}
+	},
+	"PUBLIC": {
+		"target": {
+			"schema": "PUBLIC"
+		}
+	}
+}

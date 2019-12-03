@@ -1,0 +1,96 @@
+FUNCTION "ScaleOutHeap"( )
+      RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					HEAP_SYSTEM	 		    DECIMAL(13,2),
+					HEAP_EXEC_TEMP		 	DECIMAL(13,2),
+					HEAP_MONITOR_STATS  	DECIMAL(13,2),
+					HEAP_OTHER      		DECIMAL(13,2),
+					HEAP_ROW_STORE     		DECIMAL(13,2),
+					HEAP_CACHE      		DECIMAL(13,2) 
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+
+/***************************** 
+	MPATTER1	20191008
+	Table Function to return Heap statistics for Extension Node system with Optane
+ *****************************/
+ RETURN
+ SELECT 		"HOST"."HOST" "HOST", 
+				"NAMESERVER_ACTUAL_ROLE" "NODE",
+				"SYSTEM"."GB" "HEAP_SYSTEM",
+				"TEMP"."GB" "HEAP_EXEC_TEMP",
+				"MONITOR"."GB" "HEAP_MONITOR_STATS",
+				"OTHER"."GB" "HEAP_OTHER",
+				"ROW"."GB" "HEAP_ROW_STORE",
+				"CACHE"."GB" "HEAP_CACHE"
+		
+FROM 			"Landscape_" "HOST"
+-----------  System Cache ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'System'
+				GROUP BY "HOST"
+) "SYSTEM"
+ON "HOST"."HOST" = "SYSTEM"."HOST"		
+
+-----------  Statement Execution & Intermediate Results ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'Statement Execution & Intermediate Results'
+				GROUP BY "HOST"
+) "TEMP"
+ON "HOST"."HOST" = "TEMP"."HOST"		
+	
+-----------  Monitoring & Statistical Data ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'Monitoring & Statistical Data'
+				GROUP BY "HOST"
+) "MONITOR"
+ON "HOST"."HOST" = "MONITOR"."HOST"			
+			
+-----------  Other ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'Other'
+				GROUP BY "HOST"
+) "OTHER"
+ON "HOST"."HOST" = "OTHER"."HOST"			
+				
+-----------  Row Store Tables ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'Row Store Tables'
+				GROUP BY "HOST"
+) "ROW"
+ON "HOST"."HOST" = "ROW"."HOST"		
+
+-----------  Caches ----------------------
+LEFT OUTER JOIN	
+(
+SELECT 			"HOST",
+				ROUND(SUM(EXCLUSIVE_SIZE_IN_USE/1073741824)) "GB"
+				FROM  "Heap_"
+				WHERE "COMPONENT" = 'Caches'
+				GROUP BY "HOST"
+) "CACHE"
+ON "HOST"."HOST" = "CACHE"."HOST";
+END;

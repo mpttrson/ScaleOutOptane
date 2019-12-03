@@ -1,0 +1,29 @@
+service {
+	"ScaleOutSummaryQuery"
+	  as "SummaryQuery"
+		with (	"HOST","NODE",
+				"OS_VERSION",
+				"HANA_VERSION",
+				"HW_MANUF",
+				"HW_MODEL",
+				"CPU_MODEL",
+				"CPU_SOCKETS",
+				"CPU_CORES",
+				"PMEM_AVAILABLE",
+				"PMEM_USED",
+				"PMEM_UTILIZED",
+				"DRAM_USED_PRECENT",
+				"COLUMN_STORE_MAIN",
+				"COLUMN_STORE_DELTA",
+				"COLUMN_STORE_PERSISTENT",
+				"TOTAL_RESIDENT_MEMORY",
+				"TOTAL_PHYSICAL_DRAM",
+				"TOTAL_DRAM_USED",
+				"TOTAL_DRAM_PEAK",
+				"TOTAL_DRAM_ALLOCATED",
+				"DRAM_ALLOCATION_LIMIT",
+				"USED_PERCENT",
+				"PEAK_PERCENT",
+				"ALLOCATED_PERCENT")
+		key  ("HOST","NODE");
+}

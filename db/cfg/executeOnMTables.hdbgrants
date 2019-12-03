@@ -1,0 +1,55 @@
+{
+	"grantor-service": {
+		"object_owner": {
+			"object_privileges": [{
+				"schema": "SYS",
+				"name": "M_HOST_RESOURCE_UTILIZATION",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "M_LANDSCAPE_HOST_CONFIGURATION",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "SCHEMAS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "FUNCTION_PARAMETERS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "ADAPTERS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "REMOTE_SUBSCRIPTIONS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "VIEWS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "SYNONYMS",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "TABLES",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "DUMMY",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "M_HEAP_MEMORY",
+				"privileges_with_grant_option": ["SELECT"]
+			}, {
+				"schema": "SYS",
+				"name": "M_SERVICE_MEMORY",
+				"privileges_with_grant_option": ["SELECT"]
+			}]
+		}
+	}
+}

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CPUQuery" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="CPU Query">
+  <comment text="This query shows CPU statistics by node"/>
+</descriptions>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="ScaleOutCPU" type="TABLE_FUNCTION">
+    <resourceUri>ScaleOutCPU</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="CPU">
+    <viewAttributes>
+      <viewAttribute id="ACTIVE_THREADS"/>
+      <viewAttribute id="HOST"/>
+      <viewAttribute id="NODE"/>
+      <viewAttribute id="CPU_PERCENT"/>
+      <viewAttribute id="REQUESTS_PER_SEC"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="CPU_100" datatype="INTEGER" expressionLanguage="SQL">
+        <formula>100</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <restrictedViewAttributes/>
+    <input node="ScaleOutCPU"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="CPU">
+  <attributes>
+    <attribute id="HOST" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="CPU" columnName="HOST"/>
+    </attribute>
+    <attribute id="NODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE"/>
+      <keyMapping columnObjectName="CPU" columnName="NODE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="ACTIVE_THREADS" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="ACTIVE_THREADS"/>
+      <measureMapping columnObjectName="CPU" columnName="ACTIVE_THREADS"/>
+    </measure>
+    <measure id="REQUESTS_PER_SEC" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="REQUESTS_PER_SEC"/>
+      <measureMapping columnObjectName="CPU" columnName="REQUESTS_PER_SEC"/>
+    </measure>
+  
+    <measure id="CPU_PERCENT" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CPU_PERCENT"/>
+      <measureMapping columnObjectName="CPU" columnName="CPU_PERCENT"/>
+    </measure>
+    <measure id="CPU_100" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CPU_100"/>
+      <measureMapping columnObjectName="CPU" columnName="CPU_100"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <sortAttributes>
+    <sortAttribute id="HOST" direction="ASC"/>
+    <sortAttribute id="NODE" direction="ASC"/>
+  </sortAttributes>
+  <localDimensions/>
+  <sharedDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="CPU" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="CPU" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="203.9814453125"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

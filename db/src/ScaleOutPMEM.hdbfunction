@@ -1,0 +1,28 @@
+FUNCTION "ScaleOutPMEM"( )
+      RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					PMEM_AVAILABLE 		    DECIMAL(13,2),
+					PMEM_USED		 	    DECIMAL(13,2),
+					PMEM_UTILIZED       	DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191014
+	Table Function to return PMEM statistics for Extension Node system with Optane
+ *****************************/
+ RETURN
+ SELECT 		"T1"."HOST" "HOST",
+				"T3"."NAMESERVER_ACTUAL_ROLE" "NODE",
+				ROUND("TOTAL_SIZE"/1024/1024/1024,0) "PMEM_AVAILABLE", 
+				ROUND("USED_SIZE"/2014/1024/1024,0) "PMEM_USED",
+				ROUND(("USED_SIZE"/"TOTAL_SIZE"),0) "PMEM_UTILIZED"
+				
+FROM "PersistentMemory_" T1
+
+JOIN  "Landscape_" as T3 on T1.host = T3.host 
+WHERE UPPER(T3.host_actual_roles) not like '%STANDBY%' 
+AND PORT = '30003';
+END;

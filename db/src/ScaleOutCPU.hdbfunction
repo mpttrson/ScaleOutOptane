@@ -1,0 +1,26 @@
+FUNCTION "ScaleOutCPU"( )
+     RETURNS table ( HOST					NVARCHAR(25),
+					NODE	 		    	NVARCHAR(25),
+					CPU_PERCENT		 		DECIMAL(13,2),
+					REQUESTS_PER_SEC 	    DECIMAL(13,2),
+					ACTIVE_THREADS 	        DECIMAL(13,2)
+					)
+					
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY DEFINER AS
+BEGIN
+/***************************** 
+	MPATTER1	20191015
+	Table Function to return CPU statistics for Extension Node system with Optane
+ *****************************/
+RETURN
+SELECT 			host "HOST",
+				CASE detail WHEN 'master' THEN 'MASTER' ELSE 'SLAVE' END "NODE",
+				total_cpu "CPU_PERCENT",
+				requests_per_sec "REQUESTS_PER_SEC",
+				active_thread_count "ACTIVE_THREADS"
+				
+FROM		    "ServiceStatistics_"
+WHERE			service_name = 'indexserver' ;
+
+END;
