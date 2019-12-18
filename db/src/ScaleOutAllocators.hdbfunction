@@ -10,7 +10,7 @@ FUNCTION "ScaleOutAllocators"(DEPTH BIGINT , PORT NVARCHAR(5) )
 					)
 					
 	LANGUAGE SQLSCRIPT
-	SQL SECURITY DEFINER AS
+	SQL SECURITY INVOKER AS
 BEGIN 
     /*****************************
        	MPATTER1	20191111

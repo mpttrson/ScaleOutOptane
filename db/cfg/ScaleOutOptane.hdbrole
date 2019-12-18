@@ -1,8 +1,8 @@
 {
 	"role": {
-		"name": "SimpleClassicAdmin",
+		"name": "ScaleOutOptaneAdmin#",
 		"schema_privileges": [{
-			"privileges": ["SELECT METADATA",
+			"privileges_with_grant_option": ["SELECT METADATA",
 				"SELECT CDS METADATA",
 				"SELECT",
 				"INSERT",
@@ -11,6 +11,21 @@
 				"UPDATE",
 				"CREATE TEMPORARY TABLE"
 			]
+		}],
+
+		"object_privileges": [{
+			"name": "CPUView",
+			"type": "VIEW",
+			"privileges_with_grant_option": ["SELECT"]
+		}, {
+			"name": "ScaleOutSummaryQuery",
+			"type": "VIEW",
+			"privileges_with_grant_option": ["SELECT"]
+		}, {
+			"name": "ScaleOutMemoryDetailQuery",
+			"type": "VIEW",
+			"privileges_with_grant_option": ["SELECT"]
 		}]
+
 	}
 }

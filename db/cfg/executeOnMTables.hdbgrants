@@ -49,6 +49,11 @@
 				"schema": "SYS",
 				"name": "M_SERVICE_MEMORY",
 				"privileges_with_grant_option": ["SELECT"]
+			}
+			, {
+				"schema": "SYS",
+				"name": "M_SERVICE_STATISTICS",
+				"privileges_with_grant_option": ["SELECT"]
 			}]
 		}
 	}

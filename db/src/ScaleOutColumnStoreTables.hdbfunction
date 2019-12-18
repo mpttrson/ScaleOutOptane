@@ -8,7 +8,7 @@ FUNCTION "ScaleOutColumnStoreTables"( )
 					)
 					
 	LANGUAGE SQLSCRIPT
-	SQL SECURITY DEFINER AS
+	SQL SECURITY INVOKER AS
 BEGIN
 /***************************** 
 	MPATTER1	20191003

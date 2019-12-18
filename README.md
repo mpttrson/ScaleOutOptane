@@ -63,5 +63,7 @@ DROP TABLE #PRIVILEGES;
 
 -- switch to Admin
 
-GRANT SCALEOUTADMIN TO UserName;
+GRANT "SCALEOUTOPTANE"."ScaleOutOptaneAdmin#" TO UserName with grant option;
+
+GRANT CATALOG READ TO GRANT_REMOTE_SOURCES;
 

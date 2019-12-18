@@ -1,0 +1,14 @@
+VIEW "CPUView"
+	(	"HOST", 
+		"NODE" ,
+		"CPU_PERCENT",
+		"REQUESTS_PER_SEC",
+		"ACTIVE_THREADS"
+	)
+	AS 
+	SELECT		"HOST", 
+				"NODE" ,
+				"CPU_PERCENT",
+				"REQUESTS_PER_SEC",
+				"ACTIVE_THREADS"
+	FROM		"ScaleOutCPU"();

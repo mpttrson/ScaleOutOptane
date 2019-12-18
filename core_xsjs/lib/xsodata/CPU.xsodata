@@ -1,0 +1,11 @@
+service {
+		"CPUView"
+		 as "CPU"
+			with	 (	"HOST", 
+						"NODE" ,
+						"CPU_PERCENT",
+						"REQUESTS_PER_SEC",
+						"ACTIVE_THREADS"
+					)
+		key  ("HOST","NODE");
+}

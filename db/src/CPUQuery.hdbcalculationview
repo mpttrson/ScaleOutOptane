@@ -82,7 +82,7 @@
     </shape>
     <shape modelObjectName="CPU" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="203.9814453125"/>
+      <rectangleSize width="203"/>
     </shape>
   </shapes>
 </layout>
