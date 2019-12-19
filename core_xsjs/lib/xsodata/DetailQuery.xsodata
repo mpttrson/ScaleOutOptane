@@ -1,0 +1,25 @@
+service {
+	"ScaleOutMemoryDetailQuery"
+	  as "DetailQuery"
+		with (	"HOST",
+				"NODE",
+				"TOTAL_PHYSICAL_DRAM",
+				"TOTAL_DRAM_USED",
+				"TOTAL_DRAM_PEAK",
+				"TOTAL_DRAM_ALLOCATED",
+				"TOTAL_RESIDENT_MEMORY",
+				"CODE_SIZE",
+				"STACK_SIZE",
+				"SHARED_MEM_USED",
+				"HEAP_SYSTEM",
+				"DRAM_ALLOCATION_LIMIT",
+				"HEAP_EXEC_TEMP",
+				"HEAP_MONITOR_STATS",
+				"HEAP_OTHER",
+				"HEAP_ROW_STORE",
+				"HEAP_CACHE",
+				"ALLOCATED_PERCENT",
+				"USED_PERCENT",
+				"PEAK_PERCENT")
+		key  ("HOST","NODE");
+}
