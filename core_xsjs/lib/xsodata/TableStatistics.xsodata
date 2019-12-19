@@ -1,0 +1,23 @@
+service {
+		"TableStatisticsQuery"
+		 as "TableStatistics"
+			with	(	"HOST",
+						"SCHEMA",
+						"TABLE",
+						"PARTITION",
+						"TOTAL_MEMORY",
+						"DRAM_TOTAL",
+						"DRAM_MAIN",
+						"DRAM_DELTA",
+						"DRAM_MISC",
+						"PMEM_TOTAL",
+						"EST_MAX_MEMORY",
+						"RECORD_COUNT"	        
+					)
+		key  ("HOST")
+		parameters via entity "input" results property "Result";
+}
+
+annotations {
+   enable OData4SAP;
+}

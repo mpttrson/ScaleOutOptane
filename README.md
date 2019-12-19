@@ -73,7 +73,7 @@ Services
 https://<HOST>:<PORT>/xsodata/SummaryQuery.xsodata/SummaryQuery?$format=json
 https://<HOST>:<PORT>/xsodata/CPU.xsodata/CPU?$format=json
 https://<HOST>:<PORT>/xsodata/DetailQuery.xsodata/DetailQuery?$format=json
-
+https://<HOST>:<PORT>/xsodata/TableStatistics.xsodata/input(IP_SCHEMA='ECC',IP_TABLE='T009B')/Result
 
 
 

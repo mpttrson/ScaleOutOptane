@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:Variable="http://www.sap.com/ndb/BiModelVariable.ecore" id="TableStatisticsQuery" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false" runWithInvokerPrivileges="true">
+<descriptions defaultDescription="Table Statistics Query"/>
+<localVariables>
+  <variable id="IP_SCHEMA" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="25" scale="null" mandatory="true">
+      <valueDomain type="AttributeValue">
+        <attribute name="SCHEMA"/>
+      </valueDomain>
+      <selection multiLine="false" type="Single"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_TABLE" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="25" scale="null" mandatory="true">
+      <valueDomain type="AttributeValue">
+        <attribute name="TABLE"/>
+      </valueDomain>
+      <selection multiLine="false" type="Single"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="TableFunction_1" tableFunctionName="ScaleOutTableStatistics">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <variableMapping xsi:type="Variable:VariableMapping">
+      <targetVariable name="SCHEMA"/>
+      <localVariable>IP_SCHEMA</localVariable>
+    </variableMapping>
+    <variableMapping xsi:type="Variable:VariableMapping">
+      <targetVariable name="TABLE"/>
+      <localVariable>IP_TABLE</localVariable>
+    </variableMapping>
+  </calculationView>
+</calculationViews>
+<logicalModel id="TableFunction_1">
+  <attributes>
+    <attribute id="HOST" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOST"/>
+      <keyMapping columnObjectName="TableFunction_1" columnName="HOST"/>
+    </attribute>
+    <attribute id="SCHEMA" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SCHEMA"/>
+      <keyMapping columnObjectName="TableFunction_1" columnName="SCHEMA"/>
+    </attribute>
+    <attribute id="TABLE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TABLE"/>
+      <keyMapping columnObjectName="TableFunction_1" columnName="TABLE"/>
+    </attribute>
+    <attribute id="PARTITION" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PARTITION"/>
+      <keyMapping columnObjectName="TableFunction_1" columnName="PARTITION"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TOTAL_MEMORY" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_MEMORY"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="TOTAL_MEMORY"/>
+    </measure>
+    <measure id="DRAM_TOTAL" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_TOTAL"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="DRAM_TOTAL"/>
+    </measure>
+    <measure id="DRAM_MAIN" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_MAIN"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="DRAM_MAIN"/>
+    </measure>
+    <measure id="DRAM_DELTA" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_DELTA"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="DRAM_DELTA"/>
+    </measure>
+    <measure id="DRAM_MISC" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DRAM_MISC"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="DRAM_MISC"/>
+    </measure>
+    <measure id="PMEM_TOTAL" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PMEM_TOTAL"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="PMEM_TOTAL"/>
+    </measure>
+    <measure id="EST_MAX_MEMORY" order="11" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="EST_MAX_MEMORY"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="EST_MAX_MEMORY"/>
+    </measure>
+    <measure id="RECORD_COUNT" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="RECORD_COUNT"/>
+      <measureMapping columnObjectName="TableFunction_1" columnName="RECORD_COUNT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="TableFunction_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
